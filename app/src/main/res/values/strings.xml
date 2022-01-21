@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">MundoJuego</string>
+    <string name="title">Join the numbers and get to the</string>
+    <string name="_2048_title">2048 title!</string>
+    <string name="help">Help</string>
+    <string name="menu">Main Menu</string>
+    <string name="settings">Settings</string>
+    <string name="game">Game Screen</string>
+    <string name="scores">Scores Screen</string>
+    <string name="app_logo_top">BEEN THERE</string>
+    <string name="app_logo_bottom">DONE THAT!</string>
+    <string name="app_version_info">Version 2.0.0</string>
+    <string name="playGame">Play Game</string>
+    <string name="viewScore">View Scores</string>
+
+
+    <string name="_0">0</string>
+
+
+</resources>
