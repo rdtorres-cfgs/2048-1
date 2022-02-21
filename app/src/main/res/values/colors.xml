@@ -22,5 +22,23 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="translucent">#33ffff</color>
+    <color name="green">#45f248</color>
+
+
+    <color name="dos">#eee4da</color>
+    <color name="cuatro">#ede0c8</color>
+    <color name="ocho">#f2b179</color>
+    <color name="dieciseis">#f59563</color>
+    <color name="treintaydos">#f67c5f</color>
+    <color name="sesentaycuatro">#f65e3b</color>
+
+    <color name="cientoveintiocho">#edcf72</color>
+    <color name="dosciencentayseis">#edcc61</color>
+    <color name="quiñientosdoce">#edc850</color>
+
+    <color name="mil">#edc53f</color>
+    <color name="dosmil">#edc22e</color>
+    <color name="cuatromil">#ed702e</color>
+    <color name="ochomil">#ed4c2e</color>
 
 </resources>

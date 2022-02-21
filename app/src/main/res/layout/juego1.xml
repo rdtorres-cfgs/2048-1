@@ -25,20 +25,30 @@
             android:layout_weight="2" />
 
         <Button
+            android:id="@+id/totalScore"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_margin="5dp"
             android:layout_weight="2"
             android:background="#bbada0"
-            android:layout_marginRight="5dp" />
+            android:text="0"
+            android:textSize="34sp"
+            android:layout_marginRight="5dp"/>
 
-        <Button
+        <Chronometer
+            android:id="@+id/Timer"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_margin="5dp"
+            android:paddingTop="10dp"
             android:layout_weight="2"
             android:background="#bbada0"
-            android:layout_marginLeft="5dp" />
+            android:textSize="30sp"
+            android:textAlignment="center"
+            android:textStyle="bold"
+            android:layout_marginLeft="5dp"
+            />
+
     </LinearLayout>
 
     <LinearLayout
@@ -68,6 +78,7 @@
         android:layout_height="wrap_content">
 
         <Button
+            android:id="@+id/restartButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Restart"
@@ -112,9 +123,12 @@
                 android:layout_height="match_parent"
                 android:layout_marginRight="8dp"
                 android:layout_weight="1"
+
                 android:background="@color/btnColor"
                 android:clickable="false"
                 android:enabled="false"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
                 android:textSize="34sp" />
 
             <Button
@@ -126,6 +140,8 @@
                 android:background="@color/btnColor"
                 android:clickable="false"
                 android:enabled="false"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
                 android:textSize="34sp" />
 
             <Button
@@ -137,6 +153,8 @@
                 android:background="@color/btnColor"
                 android:clickable="false"
                 android:enabled="false"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
                 android:textSize="34sp" />
 
             <Button
@@ -147,6 +165,8 @@
                 android:background="@color/btnColor"
                 android:clickable="false"
                 android:enabled="false"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
                 android:textSize="34sp" />
         </LinearLayout>
 
@@ -167,6 +187,8 @@
                 android:background="@color/btnColor"
                 android:clickable="false"
                 android:enabled="false"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
                 android:textSize="34sp" />
 
             <Button
@@ -178,6 +200,8 @@
                 android:background="@color/btnColor"
                 android:clickable="false"
                 android:enabled="false"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
                 android:textSize="34sp" />
 
             <Button
@@ -189,6 +213,8 @@
                 android:background="@color/btnColor"
                 android:clickable="false"
                 android:enabled="false"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
                 android:textSize="34sp" />
 
             <Button
@@ -199,6 +225,8 @@
                 android:background="@color/btnColor"
                 android:clickable="false"
                 android:enabled="false"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
                 android:textSize="34sp" />
         </LinearLayout>
 
@@ -219,6 +247,8 @@
                 android:background="@color/btnColor"
                 android:clickable="false"
                 android:enabled="false"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
                 android:textSize="34sp" />
 
             <Button
@@ -230,6 +260,8 @@
                 android:background="@color/btnColor"
                 android:clickable="false"
                 android:enabled="false"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
                 android:textSize="34sp" />
 
             <Button
@@ -241,6 +273,8 @@
                 android:background="@color/btnColor"
                 android:clickable="false"
                 android:enabled="false"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
                 android:textSize="34sp" />
 
             <Button
@@ -251,6 +285,8 @@
                 android:background="@color/btnColor"
                 android:clickable="false"
                 android:enabled="false"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
                 android:textSize="34sp" />
         </LinearLayout>
 
@@ -271,6 +307,8 @@
                 android:background="@color/btnColor"
                 android:clickable="false"
                 android:enabled="false"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
                 android:textSize="34sp" />
 
             <Button
@@ -282,6 +320,8 @@
                 android:background="@color/btnColor"
                 android:clickable="false"
                 android:enabled="false"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
                 android:textSize="34sp" />
 
             <Button
@@ -293,6 +333,8 @@
                 android:background="@color/btnColor"
                 android:clickable="false"
                 android:enabled="false"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
                 android:textSize="34sp" />
 
             <Button
@@ -303,6 +345,8 @@
                 android:background="@color/btnColor"
                 android:clickable="false"
                 android:enabled="false"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
                 android:textSize="34sp" />
         </LinearLayout>
     </LinearLayout>

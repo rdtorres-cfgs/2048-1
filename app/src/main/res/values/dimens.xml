@@ -10,4 +10,8 @@
     <dimen name="celda_80">60dp</dimen>
     <dimen name="padding_10">10dp</dimen>
 
+
+    <!-- Tamaño del botón -->
+    <dimen name="button_side">35dp</dimen>
+
 </resources>

@@ -1,36 +1,121 @@
 package com.example.a2048;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.widget.Button;
-import android.widget.Toast;
+import android.widget.Chronometer;
+import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.filament.View;
 
 import java.util.Random;
 
 //GEnerar metodo que contorle el random
 
 public class juego1 extends AppCompatActivity implements GestureDetector.OnGestureListener {
-    //LinearLayout LinearLayout;
-    //GridLayout GridLayout;
+    public static final String PREFS_NAME = "MyPrefsFile";
+    private static int min_distance = 100;
     String resultRandomNumber;
     private GestureDetector gestureDetector;
-    private static int min_distance = 100;
     private float x1, x2, y1, y2;
     private Button[][] matrix = new Button[4][4];
-
+    private boolean gameOver = false;
+    private int total = 0;
+    private int totalScore=total;
+    private int highScore=0;
+    private Button valorHighScore;
+    private View v;
+    Chronometer crono;
+    long Time = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.juego1);
         gestureDetector = new GestureDetector(this, this);
+
+        //valorHighScore = (Button) findViewById(R.id.highScore);
+        crono = (Chronometer) findViewById(R.id.Timer);
+        crono.setBase(SystemClock.elapsedRealtime());
+        crono.start();
+
         insertarMatrixTablero();
         generarNumRandom();
+        repintarValoresEnCasillas();
 
+        Button button= (Button) findViewById(R.id.restartButton);
+        button.setOnClickListener(new android.view.View.OnClickListener() {
+            @Override
+            public void onClick(android.view.View v) {
+               recreate();
+            }
+        });
     }
+
+    public void repintarValoresEnCasillas() {
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[0].length; j++) {
+                // colocamos colores segun valor
+                if (matrix[i][j].getText().equals("")) {
+                    matrix[i][j].setBackground(getDrawable(R.color.btnColor));
+                } else if (matrix[i][j].getText().equals("2")) {
+                    matrix[i][j].setBackground(getDrawable(R.color.dos));
+                } else if (matrix[i][j].getText().equals("4")) {
+                    matrix[i][j].setBackground(getDrawable(R.color.cuatro));
+                } else if (matrix[i][j].getText().equals("8")) {
+                    matrix[i][j].setBackground(getDrawable(R.color.ocho));
+                } else if (matrix[i][j].getText().equals("16")) {
+                    matrix[i][j].setBackground(getDrawable(R.color.dieciseis));
+                } else if (matrix[i][j].getText().equals("32")) {
+                    matrix[i][j].setBackground(getDrawable(R.color.treintaydos));
+                } else if (matrix[i][j].getText().equals("64")) {
+                    matrix[i][j].setBackground(getDrawable(R.color.sesentaycuatro));
+                } else if (matrix[i][j].getText().equals("128")) {
+                    matrix[i][j].setBackground(getDrawable(R.color.cientoveintiocho));
+                } else if (matrix[i][j].getText().equals("256")) {
+                    matrix[i][j].setBackground(getDrawable(R.color.dosciencentayseis));
+                } else if (matrix[i][j].getText().equals("512")) {
+                    matrix[i][j].setBackground(getDrawable(R.color.quiñientosdoce));
+                } else if (matrix[i][j].getText().equals("1024")) {
+                    matrix[i][j].setBackground(getDrawable(R.color.mil));
+                } else if (matrix[i][j].getText().equals("2048")) {
+                    matrix[i][j].setBackground(getDrawable(R.color.dosmil));
+                } else if (matrix[i][j].getText().equals("4096")) {
+                    matrix[i][j].setBackground(getDrawable(R.color.cuatromil));
+                }
+            }
+        }
+    }
+
+
+    public boolean checkGameOver(){
+        if ((revisionMovimientoIzquierda()==false && revisionMovimientoAbajo()==false &&
+            revisionMovimientoArriba()==false && revisionMovimientoDerecha()==false )){
+                crono.stop();
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("Looser PRINGADO");
+                builder.setMessage("Has perdido");
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Intent intent = new Intent(getApplicationContext(), Menu.class);
+                        juego1.this.finish();
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
+                return true;
+        }
+            return false;
+    }
+
 
     public boolean onTouchEvent(MotionEvent e) {
         gestureDetector.onTouchEvent(e);
@@ -49,85 +134,40 @@ public class juego1 extends AppCompatActivity implements GestureDetector.OnGestu
 
                 if (Math.abs(valueX) > min_distance) {
                     if (x2 > x1) {
-                        movimientoDerecha(0);
-                        sumaMovimientoDerecha(0);
-                        movimientoDerecha(0);
+                        if (revisionMovimientoDerecha()){
+                            movimientoDerecha();
+                            sumaMovimientoDerecha();
+                            movimientoDerecha();
+                            generarNumRandom();
+                            checkGameOver();}
 
-                        movimientoDerecha(1);
-                        sumaMovimientoDerecha(1);
-                        movimientoDerecha(1);
-
-                        movimientoDerecha(2);
-                        sumaMovimientoDerecha(2);
-                        movimientoDerecha(2);
-
-                        movimientoDerecha(3);
-                        sumaMovimientoDerecha(3);
-                        movimientoDerecha(3);
-
-                        generarNumRandom();
-
-                        Toast.makeText(this, "Derecha", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(this, "Derecha", Toast.LENGTH_SHORT).show();
                     } else {
-                        movimientoIzquierda(0);
-                        sumaMovimientoIzquierda(0);
-                        movimientoIzquierda(0);
-
-                        movimientoIzquierda(1);
-                        sumaMovimientoIzquierda(1);
-                        movimientoIzquierda(1);
-
-                        movimientoIzquierda(2);
-                        sumaMovimientoIzquierda(2);
-                        movimientoIzquierda(2);
-
-                        movimientoIzquierda(3);
-                        sumaMovimientoIzquierda(3);
-                        movimientoIzquierda(3);
-
-                        generarNumRandom();
-                        Toast.makeText(this, "Izquierda", Toast.LENGTH_LONG).show();
+                        if (revisionMovimientoIzquierda()){
+                            movimientoIzquierda();
+                            sumaMovimientoIzquierda();
+                            movimientoIzquierda();
+                            generarNumRandom();
+                            checkGameOver();}
+//                        Toast.makeText(this, "Izquierda", Toast.LENGTH_LONG).show();
                     }
                 } else if (Math.abs(valueY) > min_distance) {
                     if (y2 > y1) {
-                        movimientoAbajo(0);
-                        sumaMovimientoAbajo(0);
-                        movimientoAbajo(0);
-
-                        movimientoAbajo(1);
-                        sumaMovimientoAbajo(1);
-                        movimientoAbajo(1);
-
-                        movimientoAbajo(2);
-                        sumaMovimientoAbajo(2);
-                        movimientoAbajo(2);
-
-                        movimientoAbajo(3);
-                        sumaMovimientoAbajo(3);
-                        movimientoAbajo(3);
-
-                        generarNumRandom();
-                        Toast.makeText(this, "Abajo", Toast.LENGTH_SHORT).show();
+                        if (revisionMovimientoAbajo()){
+                            movimientoAbajo();
+                            sumaMovimientoAbajo();
+                            movimientoAbajo();
+                            generarNumRandom();
+                            checkGameOver();}
+//                        Toast.makeText(this, "Abajo", Toast.LENGTH_SHORT).show();
                     } else {
-                        movimientoArriba(0);
-                        sumaMovimientoArriba(0);
-                        movimientoArriba(0);
-
-                        movimientoArriba(1);
-                        sumaMovimientoArriba(1);
-                        movimientoArriba(1);
-
-                        movimientoArriba(2);
-                        sumaMovimientoArriba(2);
-                        movimientoArriba(2);
-
-                        movimientoArriba(3);
-                        sumaMovimientoArriba(3);
-                        movimientoArriba(3);
-
-                        generarNumRandom();
-
-                        Toast.makeText(this, "arriba", Toast.LENGTH_SHORT).show();
+                        if (revisionMovimientoArriba()){
+                            movimientoArriba();
+                            sumaMovimientoArriba();
+                            movimientoArriba();
+                            generarNumRandom();
+                            checkGameOver();}
+//                        Toast.makeText(this, "arriba", Toast.LENGTH_SHORT).show();
                     }
                 }
         }
@@ -136,8 +176,6 @@ public class juego1 extends AppCompatActivity implements GestureDetector.OnGestu
 
 
     public void generarNumRandom() {
-
-
         int filas = new Random().nextInt(4);
         int columnas = new Random().nextInt(4);
         int numero = new Random().nextInt(10);
@@ -153,7 +191,7 @@ public class juego1 extends AppCompatActivity implements GestureDetector.OnGestu
             columnas = new Random().nextInt(4);
         }
         matrix[filas][columnas].setText(resultRandomNumber);
-
+        repintarValoresEnCasillas();
         //matrix[0][0].setText(resultRandomNumber);
     }
 
@@ -176,149 +214,247 @@ public class juego1 extends AppCompatActivity implements GestureDetector.OnGestu
         matrix[3][3] = findViewById(R.id.boton15);
     }
 
-    //Movimientos de filas y columnas
-    public void movimientoDerecha(int filas) {
-        for (int movimientocol = 0; movimientocol < 3; movimientocol++) {
-            //Movimiento derecha hacia la izquierda columna 4 fila 0
-            for (int columnas = 3; columnas > 0; columnas--) {
-                if (matrix[filas][columnas].getText().equals("")) {
-                    if (!(matrix[filas][columnas - 1].getText().equals(""))) {
-                        String numeroCol = (String) matrix[filas][columnas - 1].getText();
-                        matrix[filas][columnas].setText(numeroCol);
-                        matrix[filas][columnas - 1].setText("");
+    public void movimientoDerecha() {
+        for (int filas = 0; filas <4; filas++) {
+            for (int movimientocol = 0; movimientocol < 3; movimientocol++) {
+                //Movimiento derecha hacia la izquierda columna 4 fila 0
+                for (int columnas = 3; columnas > 0; columnas--) {
+                    if (matrix[filas][columnas].getText().equals("")) {
+                        if (!(matrix[filas][columnas - 1].getText().equals(""))) {
+                            String numeroCol = (String) matrix[filas][columnas - 1].getText();
+                            matrix[filas][columnas].setText(numeroCol);
+                            matrix[filas][columnas - 1].setText("");
+                        }
                     }
                 }
             }
         }
+        repintarValoresEnCasillas();
     }
 
-    public void movimientoArriba(int columnas) {
-        for (int movimientofil = 0; movimientofil < 3; movimientofil++) {
-            //Movimiento derecha hacia la izquierda columna 4 fila 0
+    //Comprobacion movimiento Derecha
+    public boolean revisionMovimientoDerecha(){
+        for (int filas = 0; filas <4; filas++) {
+            for (int columnas = 3; columnas > 0; columnas--) {
+                if (matrix[filas][columnas].getText().equals("")&& ! matrix[filas][columnas-1].getText().equals("")) {
+                    return true;
+                } else if (matrix[filas][columnas].getText().equals(matrix[filas][columnas - 1].getText())
+                        && !(matrix[filas][columnas].getText().equals("")))
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    public void sumaMovimientoDerecha() {
+        for (int filas = 0; filas <4; filas++) {
+            for (int columnas = 3; columnas > 0; columnas--) {
+                if (matrix[filas][columnas].getText().equals(matrix[filas][columnas - 1].getText())) {
+                    if (matrix[filas][columnas].getText().equals("") || matrix[filas][columnas - 1].getText().equals("")) {
+                    } else {
+                        String col1 = (String) matrix[filas][columnas].getText();
+                        String col2 = (String) matrix[filas][columnas - 1].getText();
+
+                        int col1int = Integer.parseInt(col1);
+                        int col2int = Integer.parseInt(col2);
+                        int sumaTotalCol = col1int + col2int;
+
+                        total += sumaTotalCol;
+
+                        String sumTotalCol = Integer.toString(total);
+
+                        Button buton = findViewById(R.id.totalScore);
+                        buton.setText(sumTotalCol);
+
+                        matrix[filas][columnas].setText(Integer.toString(sumaTotalCol));
+                        matrix[filas][columnas - 1].setText("");
+
+                    }
+                }
+            }
+        }
+        repintarValoresEnCasillas();
+    }
+
+    public void movimientoIzquierda() {
+        for (int filas = 0; filas <4; filas++) {
+            for (int movimientocol = 0; movimientocol < 3; movimientocol++) {
+                //Movimiento derecha hacia la izquierda columna 4 fila 0
+                for (int columnas = 0; columnas < 3; columnas++) {
+                    if (matrix[filas][columnas].getText().equals("")) {
+                        if (!(matrix[filas][columnas + 1].getText().equals(""))) {
+                            String numeroCol = (String) matrix[filas][columnas + 1].getText();
+                            matrix[filas][columnas].setText(numeroCol);
+                            matrix[filas][columnas + 1].setText("");
+                        }
+                    }
+                }
+            }
+        }
+        repintarValoresEnCasillas();
+    }
+
+    //Comprobacion movimiento Izquierda
+    public boolean revisionMovimientoIzquierda(){
+        for (int filas = 0; filas <4; filas++) {
+            for (int columnas = 0; columnas < 3; columnas++) {
+                if (matrix[filas][columnas].getText().equals("")&& ! matrix[filas][columnas+1].getText().equals("")) {
+                    return true;
+                } else if (matrix[filas][columnas].getText().equals(matrix[filas][columnas + 1].getText())
+                        && !(matrix[filas][columnas].getText().equals("")))
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    public void sumaMovimientoIzquierda() {
+        for (int filas = 0; filas <4; filas++) {
+            for (int columnas = 0; columnas < 3; columnas++) {
+                if (matrix[filas][columnas].getText().equals(matrix[filas][columnas + 1].getText())) {
+                    if (matrix[filas][columnas].getText().equals("") || matrix[filas][columnas + 1].getText().equals("")) {
+                    } else {
+                        String col1 = (String) matrix[filas][columnas].getText();
+                        String col2 = (String) matrix[filas][columnas + 1].getText();
+
+                        int col1int = Integer.parseInt(col1);
+                        int col2int = Integer.parseInt(col2);
+                        int sumaTotalCol = col1int + col2int;
+
+                        total += sumaTotalCol;
+
+                        String sumTotalCol = Integer.toString(total);
+
+                        Button buton = findViewById(R.id.totalScore);
+                        buton.setText(sumTotalCol);
+
+                        matrix[filas][columnas].setText(Integer.toString(sumaTotalCol));
+                        matrix[filas][columnas + 1].setText("");
+                    }
+                }
+            }
+            repintarValoresEnCasillas();
+        }
+    }
+
+
+    public void movimientoArriba( ) {
+        for (int columnas = 0; columnas < 4; columnas++)
+            for (int movimientofil = 0; movimientofil < 3; movimientofil++) {
+                //Movimiento derecha hacia la izquierda columna 4 fila 0
+                for (int filas = 0; filas < 3; filas++) {
+                    if (matrix[filas][columnas].getText().equals("")) {
+                        if (!(matrix[filas + 1][columnas].getText().equals(""))) {
+                            String numeroFil = (String) matrix[filas + 1][columnas].getText();
+                            matrix[filas][columnas].setText(numeroFil);
+                            matrix[filas + 1][columnas].setText("");
+                        }
+                    }
+                }
+            }
+        repintarValoresEnCasillas();
+    }
+
+    public boolean revisionMovimientoArriba(){
+        for (int columnas = 0; columnas < 4; columnas++) {
             for (int filas = 0; filas < 3; filas++) {
-                if (matrix[filas][columnas].getText().equals("")) {
-                    if (!(matrix[filas + 1][columnas].getText().equals(""))) {
-                        String numeroFil = (String) matrix[filas + 1][columnas].getText();
-                        matrix[filas][columnas].setText(numeroFil);
+                if (matrix[filas][columnas].getText().equals("") && !matrix[filas + 1][columnas].getText().equals("")) {
+                    return true;
+                } else if (matrix[filas][columnas].getText().equals(matrix[filas+1][columnas].getText())
+                        && !(matrix[filas][columnas].getText().equals("")))
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    public void sumaMovimientoArriba() {
+        for (int columnas = 0; columnas < 4; columnas++){
+            for (int filas = 0; filas < 3; filas++) {
+                if (matrix[filas][columnas].getText().equals(matrix[filas + 1][columnas].getText())) {
+                    if (matrix[filas][columnas].getText().equals("") || matrix[filas + 1][columnas].getText().equals("")) {
+                    } else {
+                        String col1 = (String) matrix[filas][columnas].getText();
+                        String col2 = (String) matrix[filas + 1][columnas].getText();
+
+                        int fil1int = Integer.parseInt(col1);
+                        int fil2int = Integer.parseInt(col2);
+                        int sumaTotalFil = fil1int + fil2int;
+
+                        total += sumaTotalFil;
+
+                        String sumTotalCol = Integer.toString(total);
+
+                        Button buton = findViewById(R.id.totalScore);
+                        buton.setText(sumTotalCol);
+
+                        matrix[filas][columnas].setText(Integer.toString(sumaTotalFil));
                         matrix[filas + 1][columnas].setText("");
                     }
                 }
             }
         }
+        repintarValoresEnCasillas();
     }
 
-    public void movimientoIzquierda(int filas) {
-        for (int movimientocol = 0; movimientocol < 3; movimientocol++) {
-            //Movimiento derecha hacia la izquierda columna 4 fila 0
-            for (int columnas = 0; columnas < 3; columnas++) {
-                if (matrix[filas][columnas].getText().equals("")) {
-                    if (!(matrix[filas][columnas + 1].getText().equals(""))) {
-                        String numeroCol = (String) matrix[filas][columnas + 1].getText();
-                        matrix[filas][columnas].setText(numeroCol);
-                        matrix[filas][columnas + 1].setText("");
+    public void movimientoAbajo() {
+        for (int columnas = 0; columnas <4; columnas++) {
+            for (int movimientofil = 0; movimientofil < 3; movimientofil++) {
+                //Movimiento derecha hacia la izquierda columna 4 fila 0
+                for (int filas = 3; filas > 0; filas--) {
+                    if (matrix[filas][columnas].getText().equals("")) {
+                        if (!(matrix[filas - 1][columnas].getText().equals(""))) {
+                            String numeroFil = (String) matrix[filas - 1][columnas].getText();
+                            matrix[filas][columnas].setText(numeroFil);
+                            matrix[filas - 1][columnas].setText("");
+                        }
                     }
                 }
             }
+            repintarValoresEnCasillas();
         }
     }
 
-    public void movimientoAbajo(int columnas) {
-        for (int movimientofil = 0; movimientofil < 3; movimientofil++) {
-            //Movimiento derecha hacia la izquierda columna 4 fila 0
-            for (int filas = 3; filas >0; filas--) {
-                if (matrix[filas][columnas].getText().equals("")) {
-                    if (!(matrix[filas - 1][columnas].getText().equals(""))) {
-                        String numeroFil = (String) matrix[filas - 1][columnas].getText();
-                        matrix[filas][columnas].setText(numeroFil);
+    //Comprobacion movimiento Abajo
+    public boolean revisionMovimientoAbajo(){
+        for (int columnas = 0; columnas < 4; columnas++) {
+            for (int filas = 3; filas > 0; filas--) {
+                if (matrix[filas][columnas].getText().equals("") && !matrix[filas - 1][columnas].getText().equals("")) {
+                    return true;
+                } else if (matrix[filas][columnas].getText().equals(matrix[filas-1][columnas].getText())
+                        && !(matrix[filas][columnas].getText().equals("")))
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    public void sumaMovimientoAbajo() {
+        for (int columnas = 0; columnas <4; columnas++) {
+            for (int filas = 3; filas > 0; filas--) {
+                if (matrix[filas][columnas].getText().equals(matrix[filas - 1][columnas].getText())) {
+                    if (matrix[filas][columnas].getText().equals("") || matrix[filas - 1][columnas].getText().equals("")) {
+                    } else {
+                        String col1 = (String) matrix[filas][columnas].getText();
+                        String col2 = (String) matrix[filas - 1][columnas].getText();
+
+                        int fil1int = Integer.parseInt(col1);
+                        int fil2int = Integer.parseInt(col2);
+                        int sumaTotalFil = fil1int + fil2int;
+
+                        total += sumaTotalFil;
+
+                        String sumTotalCol = Integer.toString(total);
+
+                        Button buton = findViewById(R.id.totalScore);
+                        buton.setText(sumTotalCol);
+
+                        matrix[filas][columnas].setText(Integer.toString(sumaTotalFil));
                         matrix[filas - 1][columnas].setText("");
                     }
                 }
             }
-        }
-    }
-
-    //Suma de movimientos
-    public void sumaMovimientoDerecha(int filas) {
-        for (int columnas = 3; columnas > 0; columnas--) {
-            if (matrix[filas][columnas].getText().equals(matrix[filas][columnas - 1].getText())) {
-                if (matrix[filas][columnas].getText().equals("") || matrix[filas][columnas - 1].getText().equals("")) {
-                } else {
-                    String col1 = (String) matrix[filas][columnas].getText();
-                    String col2 = (String) matrix[filas][columnas - 1].getText();
-
-                    int col1int = Integer.parseInt(col1);
-                    int col2int = Integer.parseInt(col2);
-                    int sumaTotalCol = col1int + col2int;
-
-                    String sumTotalCol = Integer.toString(sumaTotalCol);
-
-                    matrix[filas][columnas].setText(sumTotalCol);
-                    matrix[filas][columnas - 1].setText("");
-                }
-            }
-        }
-    }
-
-    public void sumaMovimientoArriba(int columnas) {
-        for (int filas = 0; filas < 3; filas++) {
-            if (matrix[filas][columnas].getText().equals(matrix[filas + 1][columnas].getText())) {
-                if (matrix[filas][columnas].getText().equals("") || matrix[filas + 1][columnas].getText().equals("")) {
-                } else {
-                    String col1 = (String) matrix[filas][columnas].getText();
-                    String col2 = (String) matrix[filas + 1][columnas].getText();
-
-                    int fil1int = Integer.parseInt(col1);
-                    int fil2int = Integer.parseInt(col2);
-                    int sumaTotalFil = fil1int + fil2int;
-
-                    String sumTotalFil = Integer.toString(sumaTotalFil);
-
-                    matrix[filas][columnas].setText(sumTotalFil);
-                    matrix[filas +1][columnas].setText("");
-                }
-            }
-        }
-    }
-
-    public void sumaMovimientoIzquierda(int filas) {
-        for (int columnas = 0; columnas < 3; columnas++) {
-            if (matrix[filas][columnas].getText().equals(matrix[filas][columnas + 1].getText())) {
-                if (matrix[filas][columnas].getText().equals("") || matrix[filas][columnas + 1].getText().equals("")) {
-                } else {
-                    String col1 = (String) matrix[filas][columnas].getText();
-                    String col2 = (String) matrix[filas][columnas + 1].getText();
-
-                    int col1int = Integer.parseInt(col1);
-                    int col2int = Integer.parseInt(col2);
-                    int sumaTotalCol = col1int + col2int;
-
-                    String sumTotalCol = Integer.toString(sumaTotalCol);
-
-                    matrix[filas][columnas].setText(sumTotalCol);
-                    matrix[filas][columnas + 1].setText("");
-                }
-            }
-        }
-    }
-
-    public void sumaMovimientoAbajo(int columnas) {
-        for (int filas = 3; filas > 0; filas--) {
-            if (matrix[filas][columnas].getText().equals(matrix[filas - 1][columnas].getText())) {
-                if (matrix[filas][columnas].getText().equals("") || matrix[filas - 1][columnas].getText().equals("")) {
-                } else {
-                    String col1 = (String) matrix[filas][columnas].getText();
-                    String col2 = (String) matrix[filas - 1][columnas].getText();
-
-                    int fil1int = Integer.parseInt(col1);
-                    int fil2int = Integer.parseInt(col2);
-                    int sumaTotalFil = fil1int + fil2int;
-
-                    String sumTotalFil = Integer.toString(sumaTotalFil);
-
-                    matrix[filas][columnas].setText(sumTotalFil);
-                    matrix[filas - 1][columnas].setText("");
-                }
-            }
+            repintarValoresEnCasillas();
         }
     }
 

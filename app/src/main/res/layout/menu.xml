@@ -6,10 +6,7 @@
     android:background="@drawable/galaxia"
     android:orientation="vertical">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@android:color/white" />
+
 
     <TextView
         android:id="@+id/TextViewTopTitle"
@@ -43,10 +40,6 @@
         </TableRow>
     </TableLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@android:color/white" />
 
     <TextView
 
@@ -58,10 +51,6 @@
         android:textColor="@color/logo_color"
         android:textSize="@dimen/menu_item_size"></TextView>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@android:color/white" />
 
     <TextView
         android:id="@+id/TextViewScores"
@@ -72,10 +61,7 @@
         android:textColor="@color/logo_color"
         android:textSize="@dimen/menu_item_size"></TextView>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@android:color/white" />
+
 
     <TextView
         android:id="@+id/TextViewSettings"
@@ -86,10 +72,7 @@
         android:textColor="@color/logo_color"
         android:textSize="@dimen/menu_item_size"></TextView>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@android:color/white" />
+
 
     <TextView
         android:id="@+id/TextViewHelp"
@@ -100,10 +83,7 @@
         android:textColor="@color/logo_color"
         android:textSize="@dimen/menu_item_size"></TextView>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@android:color/white" />
+
 
     <ImageView
         android:layout_width="match_parent"
