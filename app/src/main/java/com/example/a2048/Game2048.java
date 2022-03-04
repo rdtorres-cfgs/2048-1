@@ -8,7 +8,6 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.widget.Button;
 import android.widget.Chronometer;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,8 +18,7 @@ import java.util.Random;
 
 //GEnerar metodo que contorle el random
 
-public class juego1 extends AppCompatActivity implements GestureDetector.OnGestureListener {
-    public static final String PREFS_NAME = "MyPrefsFile";
+public class Game2048 extends AppCompatActivity implements GestureDetector.OnGestureListener {
     private static int min_distance = 100;
     String resultRandomNumber;
     private GestureDetector gestureDetector;
@@ -29,16 +27,15 @@ public class juego1 extends AppCompatActivity implements GestureDetector.OnGestu
     private boolean gameOver = false;
     private int total = 0;
     private int totalScore=total;
-    private int highScore=0;
-    private Button valorHighScore;
     private View v;
     Chronometer crono;
     long Time = 0;
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.juego1);
+        setContentView(R.layout.game2048);
         gestureDetector = new GestureDetector(this, this);
 
         //valorHighScore = (Button) findViewById(R.id.highScore);
@@ -50,11 +47,19 @@ public class juego1 extends AppCompatActivity implements GestureDetector.OnGestu
         generarNumRandom();
         repintarValoresEnCasillas();
 
-        Button button= (Button) findViewById(R.id.restartButton);
-        button.setOnClickListener(new android.view.View.OnClickListener() {
+        Button restart= (Button) findViewById(R.id.restartButton);
+        restart.setOnClickListener(new android.view.View.OnClickListener() {
             @Override
             public void onClick(android.view.View v) {
                recreate();
+            }
+        });
+
+        Button stop= (Button) findViewById(R.id.stopButton);
+        stop.setOnClickListener(new android.view.View.OnClickListener() {
+            @Override
+            public void onClick(android.view.View v) {
+                startActivity(new Intent(Game2048.this, Menu.class)); ;;
             }
         });
     }
@@ -106,7 +111,7 @@ public class juego1 extends AppCompatActivity implements GestureDetector.OnGestu
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         Intent intent = new Intent(getApplicationContext(), Menu.class);
-                        juego1.this.finish();
+                        Game2048.this.finish();
                     }
                 });
                 AlertDialog dialog = builder.create();

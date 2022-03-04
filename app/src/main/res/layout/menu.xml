@@ -43,14 +43,22 @@
 
     <TextView
 
-        android:id="@+id/TextViewPlay"
+        android:id="@+id/TextViewPlay1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="@string/playGame"
+        android:text="@string/playGame1"
         android:textColor="@color/logo_color"
         android:textSize="@dimen/menu_item_size"></TextView>
+    <TextView
 
+        android:id="@+id/TextViewPlay2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/playGame2"
+        android:textColor="@color/logo_color"
+        android:textSize="@dimen/menu_item_size"></TextView>
 
     <TextView
         android:id="@+id/TextViewScores"
